@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ t('search_title') }} - MyGameList{% endblock %}
+
+{% block content %}
+
+    <span class="hero-eyebrow">{{ t('search_title') }}</span>
+    <h1 style="font-family: var(--font-display); font-size: 28px; margin-bottom: 20px;">
+        {% if query %}"{{ query }}" {{ t('search_results_for') }}{% else %}{{ t('search_title') }}{% endif %}
+    </h1>
+
+    {% if results %}
+        <div class="game-grid">
+            {% for game in results %}
+                <a href="{{ url_for('game_detail', game_id=game.id, q=query) }}" class="game-card">
+                    <div class="game-card-media">
+                        {% if game.background_image %}
+                            <img src="{{ game.background_image }}" alt="{{ game.name }}">
+                        {% else %}
+                            <div class="no-image">{{ t('no_image') }}</div>
+                        {% endif %}
+
+                        {% if game.metacritic %}
+                            {% set mc_class = 'mc-high' if game.metacritic >= 75 else ('mc-mid' if game.metacritic >= 50 else 'mc-low') %}
+                            <span class="badge-mc {{ mc_class }}">{{ game.metacritic }}</span>
+                        {% endif %}
+
+                        {% if game.id in owned_ids %}
+                            <span class="badge-owned">✓</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="game-card-body">
+                        <h3>{{ game.name }}</h3>
+                        <div class="game-card-meta">
+                            <span>{% if game.released %}{{ game.released[:4] }}{% else %}—{% endif %}</span>
+                        </div>
+                    </div>
+
+                    {% if game.id in owned_ids %}
+                        <div class="search-card-hint search-card-hint-owned">{{ t('search_hint_owned') }}</div>
+                    {% else %}
+                        <div class="search-card-hint">{{ t('search_hint') }}</div>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    {% elif query %}
+        <p class="empty-state">"{{ query }}" {{ t('search_no_results') }}</p>
+    {% else %}
+        <p class="empty-state">{{ t('search_prompt') }}</p>
+    {% endif %}
+
+{% endblock %}

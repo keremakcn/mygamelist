@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if game %}{{ t('edit_save') }} - {{ game.name }}{% else %}{{ t('not_found_title') }}{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if game %}
+        <div class="edit-card">
+            <div class="edit-header">
+                {% if game.cover_url %}
+                    <img src="{{ game.cover_url }}" alt="{{ game.name }}">
+                {% else %}
+                    <div class="no-image">—</div>
+                {% endif %}
+                <h1>{{ game.name }}</h1>
+            </div>
+
+            <form method="post" class="edit-form">
+
+                <label for="status">{{ t('edit_status') }}</label>
+                <select name="status" id="status">
+                    <option value="Want to Play" {% if game.status == "Want to Play" %}selected{% endif %}>{{ t('status_Want to Play') }}</option>
+                    <option value="Playing" {% if game.status == "Playing" %}selected{% endif %}>{{ t('status_Playing') }}</option>
+                    <option value="Played" {% if game.status == "Played" %}selected{% endif %}>{{ t('status_Played') }}</option>
+                    <option value="Dropped" {% if game.status == "Dropped" %}selected{% endif %}>{{ t('status_Dropped') }}</option>
+                </select>
+
+                <label for="my_rating">{{ t('edit_rating') }}</label>
+                <input type="number" name="my_rating" id="my_rating" min="0" max="10" step="0.5"
+                       value="{{ game.my_rating if game.my_rating is not none else '' }}">
+
+                <label for="note">{{ t('edit_note') }}</label>
+                <textarea name="note" id="note" rows="4">{{ game.note or '' }}</textarea>
+
+                <label for="played_date">{{ t('edit_played_date') }}</label>
+                <input type="date" name="played_date" id="played_date" value="{{ game.played_date or '' }}">
+
+                <label class="favorite-toggle" style="margin-top: 16px;">
+                    <input type="checkbox" name="favorite" {% if game.favorite %}checked{% endif %}>
+                    <span class="star-icon">★</span>
+                    <span>{{ t('edit_favorite') }}</span>
+                </label>
+
+                <div class="edit-actions">
+                    <button type="submit" class="btn-primary">{{ t('edit_save') }}</button>
+                    <a href="{{ url_for('index') }}" class="btn-secondary">{{ t('edit_cancel') }}</a>
+                </div>
+
+            </form>
+        </div>
+    {% else %}
+        <div class="not-found">
+            <h1>{{ t('not_found_title') }}</h1>
+            <a href="{{ url_for('index') }}" class="btn-secondary">{{ t('not_found_button') }}</a>
+        </div>
+    {% endif %}
+
+{% endblock %}

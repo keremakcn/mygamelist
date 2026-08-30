@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if game %}{{ game.name }} - MyGameList{% else %}{{ t('not_found_title') }}{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if game %}
+            {% if is_offline %}
+            <p class="empty-state" style="margin-bottom:16px; color: var(--gold); border-color: var(--gold);">{{ t('offline_banner') }}</p>
+        {% endif %}
+        <div style="display:flex; gap:20px; flex-wrap:wrap;">
+            <a href="{{ url_for('index') }}" class="back-link">{{ t('detail_back') }}</a>
+            {% if search_query %}
+                <a href="{{ url_for('search', q=search_query) }}" class="back-link">{{ t('detail_back_search') }} "{{ search_query }}"</a>
+            {% endif %}
+        </div>
+
+        <div class="detail-card">
+            <div class="game-detail-layout">
+                <div class="game-detail-cover">
+                    {% if game.local_image_path %}
+                        <img src="{{ url_for('game_image', filename=game.local_image_path) }}" alt="{{ game.name }}">
+                    {% elif game.background_image %}
+                        <img src="{{ game.background_image }}" alt="{{ game.name }}">
+                    {% else %}
+                        <div class="no-image" style="height:280px;">{{ t('no_image') }}</div>
+                    {% endif %}
+
+                    {% if game.metacritic %}
+                        {% set mc_class = 'mc-high' if game.metacritic >= 75 else ('mc-mid' if game.metacritic >= 50 else 'mc-low') %}
+                        <span class="mc-score-badge {{ mc_class }}">{{ game.metacritic }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="game-detail-info">
+                    <h1>{{ game.name }}</h1>
+
+                    <div class="detail-chips">
+                        <span class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+                            {{ t('detail_release_date') }}: {{ game.released or t('detail_date_na') }}
+                        </span>
+
+                        <span class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                            {% if game.platforms %}{% for p in game.platforms %}{{ p.platform.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}{{ t('detail_platform_na') }}{% endif %}
+                        </span>
+
+                        <span class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="8" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+                            {% if game.genres %}{% for g in game.genres %}{{ g.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}{{ t('detail_genre_na') }}{% endif %}
+                        </span>
+
+                        {% if game.developers %}
+                            <span class="chip">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+                                {% for d in game.developers %}{{ d.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+                            </span>
+                        {% endif %}
+
+                        {% if game.publishers %}
+                            <span class="chip">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-6 9 6-9 6-9-6zM3 9v6l9 6 9-6V9"/></svg>
+                                {% for p in game.publishers %}{{ p.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+                            </span>
+                        {% endif %}
+                        <a href="https://www.youtube.com/results?search_query={{ (game.name ~ ' trailer') | urlencode }}" target="_blank" rel="noopener" class="chip">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3V9z" fill="currentColor" stroke="none"/></svg>
+                            {{ t('detail_youtube') }}
+                        </a>
+                    </div>
+
+                    <div class="game-description">
+                        {% if game.description_raw %}
+                            <p>{{ game.description_raw }}</p>
+                        {% else %}
+                            <p>{{ t('detail_no_description') }}</p>
+                        {% endif %}
+                    </div>
+
+                    {% if in_list %}
+                        <h2 class="section-heading" style="margin-top: 0;">{{ t('detail_library_heading') }}</h2>
+
+                        <form method="post" action="{{ url_for('edit_game', game_id=game.id) }}" class="edit-form" style="max-width: 420px;">
+                            <input type="hidden" name="next" value="{{ url_for('game_detail', game_id=game.id) }}">
+
+                            <label for="status">{{ t('edit_status') }}</label>
+                            <select name="status" id="status">
+                                <option value="Want to Play" {% if my_game.status == "Want to Play" %}selected{% endif %}>{{ t('status_Want to Play') }}</option>
+                                <option value="Playing" {% if my_game.status == "Playing" %}selected{% endif %}>{{ t('status_Playing') }}</option>
+                                <option value="Played" {% if my_game.status == "Played" %}selected{% endif %}>{{ t('status_Played') }}</option>
+                                <option value="Dropped" {% if my_game.status == "Dropped" %}selected{% endif %}>{{ t('status_Dropped') }}</option>
+                            </select>
+
+                            <label for="my_rating">{{ t('edit_rating') }}</label>
+                            <input type="number" name="my_rating" id="my_rating" min="0" max="10" step="0.5"
+                                   value="{{ my_game.my_rating if my_game.my_rating is not none else '' }}">
+
+                            <label for="note">{{ t('edit_note') }}</label>
+                            <textarea name="note" id="note" rows="4">{{ my_game.note or '' }}</textarea>
+
+                            <label for="played_date">{{ t('edit_played_date') }}</label>
+                            <input type="date" name="played_date" id="played_date" value="{{ my_game.played_date or '' }}">
+
+                            <label class="favorite-toggle" style="margin-top: 16px;">
+                                <input type="checkbox" name="favorite" {% if my_game.favorite %}checked{% endif %}>
+                                <span class="star-icon">★</span>
+                                <span>{{ t('edit_favorite') }}</span>
+                            </label>
+
+                            <div class="edit-actions">
+                                <button type="submit" class="btn-primary">{{ t('edit_save') }}</button>
+                            </div>
+                        </form>
+
+                        <form method="post" action="{{ url_for('index') }}" class="delete-form" data-game-name="{{ game.name }}" style="margin-top: 14px;">
+                            <input type="hidden" name="delete_game_id" value="{{ game.id }}">
+                            <button type="submit" class="btn-danger">{{ t('card_delete') }}</button>
+                        </form>
+                    {% else %}
+                        <form method="post">
+                            <button type="submit" class="btn-primary">{{ t('detail_add_library') }}</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="not-found">
+            <h1>{{ t('not_found_title') }}</h1>
+            <p>{{ t('not_found_text') }}</p>
+            <a href="{{ url_for('index') }}" class="btn-secondary">{{ t('not_found_button') }}</a>
+        </div>
+    {% endif %}
+
+{% endblock %}

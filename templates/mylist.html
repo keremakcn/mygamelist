@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}My List - MyGameList{% endblock %}
+
+{% block content %}
+
+    <h1>My Game List</h1>
+
+    <div class="status-summary">
+        <span>Want to Play ({{ counts["Want to Play"] }})</span>
+        <span>Playing ({{ counts["Playing"] }})</span>
+        <span>Played ({{ counts["Played"] }})</span>
+        <span>Dropped ({{ counts["Dropped"] }})</span>
+    </div>
+
+    {% if games %}
+        <div class="game-grid">
+            {% for game in games %}
+                <div class="game-card">
+                    {% if game.cover_url %}
+                        <img src="{{ game.cover_url }}" alt="{{ game.name }}">
+                    {% else %}
+                        <div class="no-image">Görsel yok</div>
+                    {% endif %}
+
+                    <h3>
+                        {{ game.name }}
+                        {% if game.favorite %}♥{% endif %}
+                    </h3>
+
+                    <p>Status: {{ game.status }}</p>
+
+                    <p>
+                        {% if game.metacritic %}
+                            Metacritic: {{ game.metacritic }}
+                        {% else %}
+                            Metacritic: N/A
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        {% if game.my_rating %}
+                            My Rating: {{ game.my_rating }}/10
+                        {% else %}
+                            My Rating: -
+                        {% endif %}
+                    </p>
+
+                    <a href="{{ url_for('game_detail', game_id=game.game_id) }}" class="btn-view">Görüntüle</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-state">Listende henüz oyun yok. Arama yapıp bir oyun ekleyebilirsin.</p>
+    {% endif %}
+
+{% endblock %}

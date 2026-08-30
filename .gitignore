@@ -1,0 +1,9 @@
+.env
+venv/
+__pycache__/
+games.db
+config.json
+game_images/
+build/
+dist/
+*.spec
