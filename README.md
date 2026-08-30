@@ -1,415 +1,212 @@
 # 🎮 MyGameList
 
-A personal video game tracking application built with **Python, Flask, SQLite, PyWebView, and PyInstaller**.
+**MyGameList** is a personal game library and tracking application.
 
-MyGameList lets you search for games, add them to your personal library, track your playing status, rate games, write notes, record played dates, and mark your favorite games.
+Search for games, add them to your library, track what you're playing, rate games yourself, write notes, mark favorites, and keep track of when you finished a game.
 
-Game information such as cover art, platforms, genres, developers, publishers, and Metacritic scores is provided by the **RAWG Video Games Database API**. Your personal library information is stored locally and kept separate from the external game data.
+Game information is provided by the **RAWG Video Games Database API**, while your personal library is stored locally on your computer.
 
 ---
 
-## ✨ Features
+## 📸 Features
 
-* 🔍 **Game search** — Search for games using the RAWG API
-* 📚 **Personal library** — Add and manage games in your collection
-* 🎮 **Status tracking** — Track games as:
+* 🔍 Search for games
+* 📚 Build your personal game library
+* 🎮 Track your status:
 
   * Want to Play
   * Playing
   * Played
   * Dropped
-* ⭐ **Personal rating** — Rate games on your own 0–10 scale
-* 📝 **Notes** — Write your own notes and thoughts about games
-* ❤️ **Favorites** — Mark games as favorites
-* 📅 **Played date** — Record when you finished a game
-* 🔀 **Filtering & sorting** — Filter and sort your library in different ways
-* 🌐 **Bilingual interface** — Turkish / English language support
-* 🎨 **Custom design** — Dark theme with a game cartridge / HUD-inspired interface
-* 🛡️ **Error handling** — Handles API failures, incomplete data, and connection problems without crashing
-* 🖥️ **Desktop application** — Runs as a standalone Windows application
-* 💾 **Local data storage** — Your personal library is stored locally in SQLite
+* ⭐ Give games your own rating from 0–10
+* 📝 Write personal notes
+* ❤️ Mark favorite games
+* 📅 Record played dates
+* 🔀 Filter and sort your library
+* 🌐 Turkish / English interface
+* 🎨 Custom dark gaming-themed interface
+* 🖥️ Windows desktop application
+* 💾 Local SQLite database
+* 🛡️ Error handling for API and connection problems
 
 ---
 
-# 📥 Download & Installation
+# 📥 Download
 
-## 🪟 Windows
+You can download the latest Windows version from the **[Releases](https://github.com/your-username/mygamelist/releases)** page.
 
-You do **not** need Python or any programming knowledge to use the Windows version.
-
-### 1. Download MyGameList
-
-Go to the **[Releases](https://github.com/your-username/mygamelist/releases)** page and download the latest:
+Download:
 
 ```text
 MyGameList-v1.0.0.zip
 ```
 
-### 2. Extract the ZIP
+### Installation
 
-Extract the ZIP file to a location of your choice.
+1. Download the ZIP file.
+2. Extract it anywhere you want.
+3. Open the extracted `MyGameList` folder.
+4. Run **`MyGameList.exe`**.
 
-It is recommended to keep the entire application inside its own folder:
-
-```text
-MyGameList/
-├── MyGameList.exe
-├── ...
-└── ...
-```
-
-**Do not move or delete individual files from this folder.**
-
-The application may create additional files and folders while it is running, so keeping the complete folder together is important.
-
-### 3. Start the application
-
-Open:
-
-```text
-MyGameList.exe
-```
-
-The application will open in its own desktop window.
-
-No browser is required.
+That's it. You don't need to install Python or any other dependencies.
 
 ---
 
-# 🔑 First-Time Setup — RAWG API Key
+# 🔑 First Launch
 
-MyGameList uses the **RAWG Video Games Database API** to retrieve game information.
+MyGameList uses the **RAWG API** to search for games and retrieve game information.
 
-A RAWG API key is required for the application to search for and retrieve game data. RAWG's API documentation states that an API key must be included with API requests.
+When you launch the application for the first time, MyGameList will ask you for a **RAWG API key**.
 
-**You only need to do this during the initial setup.**
+### Getting your API key
 
-### Step 1 — Open the application
+1. Open the **[RAWG API page](https://rawg.io/apidocs)**.
+2. Create a free RAWG account or log in to your existing account.
+3. Follow the RAWG instructions to obtain your API key.
+4. Copy the API key.
+5. Return to MyGameList and enter the key when the application asks for it.
 
-Run:
+After the key is saved, you can start using the application.
 
-```text
-MyGameList.exe
-```
-
-If an API key has not been configured yet, MyGameList will display a setup screen explaining that an API key is required.
-
-### Step 2 — Create a RAWG account
-
-The application provides a link to the RAWG website.
-
-Open the link and create a free RAWG account if you do not already have one.
-
-### Step 3 — Get your API key
-
-After creating/logging into your RAWG account, go to the RAWG API page:
-
-**[RAWG API Documentation](https://rawg.io/apidocs)**
-
-RAWG provides API keys through its API service.
-
-Copy your API key.
-
-### Step 4 — Enter the API key in MyGameList
-
-Return to MyGameList and paste the API key into the API key field.
-
-Save/continue to complete the setup.
-
-After the API key is configured, you can start searching for games and using the application normally.
-
-> 🔐 **Your API key is personal. Do not share it publicly or upload it to GitHub.**
+> 🔐 **Never share your API key publicly or upload it to GitHub.**
 
 ---
 
-# 🎮 Using MyGameList
+# 💾 Your Library
 
-Once the setup is complete, you can start building your game library.
+Your personal library is stored **locally on your computer**.
 
-### 🔍 Search
+The application uses a SQLite database to store information such as:
 
-Use the search bar to find games through the RAWG database.
-
-Search results can include information such as:
-
-* Cover art
-* Metacritic score
-* Platforms
-* Genres
-* Developer
-* Publisher
-
-### 📚 Add a game
-
-Open a game from the search results and add it to your personal library.
-
-The game's external information and your personal library information are stored separately.
-
-### 🎯 Manage your library
-
-For games in your library, you can:
-
-* Change the game status
-* Add your own rating
-* Write notes
-* Mark the game as a favorite
-* Record the played date
-* Edit information
-* Remove the game from your library
-
-### 🔀 Filter and sort
-
-Your library can be filtered and sorted according to different criteria, including:
-
-* Status
+* Your games
+* Game status
+* Personal ratings
+* Notes
 * Favorites
-* Game name
-* Metacritic score
-* Personal rating
-* Date added
-
----
-
-# 💾 Your Data
-
-MyGameList stores your personal library locally.
-
-The main database file is:
-
-```text
-games.db
-```
-
-This database contains information such as:
-
-* Games in your library
-* Your ratings
-* Your notes
-* Favorite status
-* Playing status
 * Played dates
 
-Your library is **not stored on a MyGameList online account**.
+Your library is not dependent on an online MyGameList account.
 
-### ⚠️ Important
+### ⚠️ Keep the application folder together
 
-Keep the complete `MyGameList` folder together.
+The application may create additional files and folders while you use it.
 
-Do not delete:
+For this reason, keep the complete `MyGameList` folder together and do not delete or move individual files.
+
+If you want to back up your library, keep a copy of your application data, especially:
 
 ```text
 games.db
 ```
 
-if you want to keep your library.
+---
 
-It is also recommended to make a backup of your application folder if your library is important to you.
+# 🛠️ Built With
+
+| Technology  | Purpose                    |
+| ----------- | -------------------------- |
+| Python      | Backend                    |
+| Flask       | Web application framework  |
+| SQLite      | Local database             |
+| HTML / CSS  | Interface                  |
+| Jinja2      | HTML templates             |
+| PyWebView   | Desktop application window |
+| PyInstaller | Windows executable         |
+| RAWG API    | Game data                  |
 
 ---
 
-# 🛠️ Running from Source
+# 🧑‍💻 Running from Source
 
-If you want to inspect, modify, or develop MyGameList, you can run it directly from the source code.
+If you want to explore or modify the source code:
 
-## Requirements
+### Requirements
 
 * Python 3.10+
 * Git
-* A RAWG API key
+* RAWG API key
 
-## 1. Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/your-username/mygamelist.git
 cd mygamelist
 ```
 
-## 2. Create a virtual environment
-
-Recommended:
+### Install dependencies
 
 ```bash
 python -m venv venv
-```
-
-### Windows
-
-```bash
 venv\Scripts\activate
-```
-
-### macOS / Linux
-
-```bash
-source venv/bin/activate
-```
-
-## 3. Install dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
-## 4. Configure the RAWG API key
+### Configure the API
 
-Create a `.env` file in the project root:
+Create a `.env` file:
 
 ```env
 RAWG_API_KEY=your_key_here
 ```
 
-**Do not commit your `.env` file to GitHub.**
-
-The repository contains `.env.example` as a template.
-
-## 5. Initialize the database
+Then initialize the database:
 
 ```bash
 python database.py
 ```
 
-## 6. Run the application
+Run the application:
 
 ```bash
 python app.py
 ```
 
-Then open:
+The development version will be available at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-in your browser.
-
----
-
-# 🧱 Tech Stack
-
-| Layer          | Technology                    |
-| -------------- | ----------------------------- |
-| Backend        | Python, Flask                 |
-| Database       | SQLite                        |
-| Frontend       | HTML, CSS, Jinja2             |
-| External API   | RAWG Video Games Database API |
-| Desktop Window | PyWebView                     |
-| Packaging      | PyInstaller                   |
-
----
-
-# 📁 Project Structure
-
-```text
-mygamelist/
-├── app.py                 # Flask routes and RAWG API logic
-├── database.py            # SQLite database setup and queries
-├── translations.py        # Turkish / English translations
-├── requirements.txt       # Python dependencies
-├── .env.example           # Example environment configuration
-├── templates/             # Jinja2 HTML templates
-│   ├── layout.html
-│   ├── index.html
-│   ├── search.html
-│   ├── game.html
-│   ├── edit.html
-│   └── 404.html
-└── static/
-    └── style.css
-```
-
-Local files such as `.env`, `games.db`, configuration files, and application-generated data are not included in the Git repository.
-
----
-
-# 🗄️ Database Design
-
-MyGameList deliberately separates **external game data** from the user's **personal game data**.
-
-### `games`
-
-Stores game information retrieved from RAWG, such as:
-
-* RAWG ID
-* Name
-* Metacritic score
-* Platforms
-* Genres
-* Developer
-* Publisher
-* Cover art
-
-### `my_games`
-
-Stores the user's personal relationship with each game:
-
-* Status
-* Personal rating
-* Notes
-* Favorite status
-* Played date
-
-Conceptually:
-
-```text
-games                         my_games
-------                        ---------
-id (RAWG id)  ◄────────────── game_id
-name                          status
-metacritic                    my_rating
-platforms                     note
-genres                        favorite
-...                           played_date
-```
-
-This separation means that external game information and personal library information remain independent.
-
-It also provides a foundation for a future multi-user system. A future `user_id` could be added to `my_games` while the shared `games` table remains reusable.
-
 ---
 
 # 🗺️ Roadmap
 
-## ✅ Completed
+### Completed
 
 * [x] RAWG API integration
 * [x] Game search
-* [x] Personal game library
-* [x] Game status tracking
+* [x] Personal library
+* [x] Status tracking
 * [x] Personal ratings
 * [x] Notes
 * [x] Favorites
 * [x] Played dates
-* [x] Filtering and sorting
-* [x] Turkish / English language support
-* [x] Custom dark interface
+* [x] Filtering & sorting
+* [x] Turkish / English support
+* [x] Custom UI
 * [x] Error handling
-* [x] Desktop application packaging
-* [x] Windows `.exe` release
+* [x] Windows desktop version
 
-## 🔮 Future
+### Planned
 
 * [ ] User accounts
-* [ ] Signup / login system
 * [ ] Multi-user support
-* [ ] Web deployment
-* [ ] Personal libraries for multiple users
+* [ ] Online/web version
 
 ---
 
 # 📄 License
 
-This project is a personal project and currently does not have a specified open-source license.
+This is a personal project and currently has no specified open-source license.
 
 ---
 
 # 🙏 Acknowledgments
 
-Game data and images are provided by the **[RAWG Video Games Database API](https://rawg.io/apidocs)**.
+Game data is provided by the **[RAWG Video Games Database API](https://rawg.io/apidocs)**.
 
 MyGameList is an independent personal project and is not affiliated with RAWG.
 
 ---
 
-## 🎮 MyGameList
-
-A personal game library and tracking application built to make managing a personal game collection simple, organized, and enjoyable.
+**MyGameList — Keep track of the games you play. 🎮**
